@@ -1,0 +1,65 @@
+sqlplus
+
+/as sysdba
+
+
+//계정생성시 'c##'을 붙여야 한다. 그걸 생략하기 위해 설정한것.
+
+SQL> ALTER SESSION SET "_ORACLE_SCRIPT"=TRUE;                        //이제 명령어를 날리면 된다.
+
+COMMIT; 
+
+//계정생성 사용자명 : MULTI , PW : MULTI로 계정 만들었다.
+SQL> CREATE USER MULTI IDENTIFIED BY MULTY;
+
+//권한부여
+SQL> GRANT CONNECT, RESOURCE TO MULTI;
+
+//데이터 입력 가능하게 설정
+SQL> GRANT UNLIMITED  TABLESPACE TO MULTI;
+
+//시스템계정 -> MULTI 접속
+CONN MULTI/MULTI;
+
+//접속방법
+sqlplus
+사용자명 입력: MULTI
+비밀번호 입력:
+SQL>
+
+SQL> SELECT * FROM TABS; 선택된 레코드가 없습니다.
+
+//테이블 생성
+SQL> CREATE TABLE TEST(NO NUMBER, NAME VARCHAR2(20));
+
+테이블이 생성되었습니다.
+//테이블 조회
+SQL> SELECT * FROM TEST;
+
+선택된 레코드가 없습니다.
+
+//TEST테이블에 데이터 1줄 추가
+SQL> INSERT INTO TEST VALUES(1,'박태욱');
+1 개의 행이 만들어졌습니다.
+SQL> INSERT INTO TEST VALUES(2,'PTW');
+1 개의 행이 만들어졌습니다.
+SQL> SELECT * FROM TEST;
+
+        NO NAME
+---------- ----------------------------------------
+         1 박태욱
+         2 PTW
+
+SQL> SELECT * FROM TEST WHERE NO=1;
+
+        NO NAME
+---------- ----------------------------------------
+         1 박태욱
+
+
+//테이블 삭제
+SQL>DROP TABLE TEST;
+테이블이 삭제되었습니다.
+
+//접속종료
+SQL>EXIT;
