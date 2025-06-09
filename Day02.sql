@@ -438,7 +438,7 @@ FROM EMPLOYEE;
 
 --6. 부서코드가 D5, D9인 직원들 중에서 2004년도에 입사한 직원의 정보 조회함.
 --   사번 사원명 부서코드 입사일
-SELECT EMP_ID, EMP_NAME, JOB_CODE, HIRE_DATE FROM EMPLOYEE WHERE DEPT_CODE IN('D5','D9') AND SUBSTR(TO_CHAR(HIRE_DATE,'YYYY-MM-DD'),1,4) = 2004;
+SELECT EMP_ID, EMP_NAME, DEPT_CODE, HIRE_DATE FROM EMPLOYEE WHERE DEPT_CODE IN('D5','D9') AND SUBSTR(TO_CHAR(HIRE_DATE,'YYYY-MM-DD'),1,4) = 2004;
 
 
 
@@ -447,7 +447,17 @@ SELECT EMP_ID, EMP_NAME, JOB_CODE, HIRE_DATE FROM EMPLOYEE WHERE DEPT_CODE IN('D
 --   ㅇㅇ년 ㅇㅇ월 ㅇㅇ일로 출력되게 함.
 --   나이는 주민번호에서 추출해서 날짜데이터로 변환한 다음, 계산함
 --  (이상한 날짜 값이 들어간 사원들은 WHERE 조건절을 이용하여 제외)
-SELECT EMP_NAME 직원명, DEPT_CODE 부서코드, CONCAT(SUBSㅊTR(EMP_NO,1,2),'년',SUBSTR(EMP_NO,3,2),'월',SUBSTR(EMP_NO,5,2),'일') FROM EMPLOYEE;
+--SELECT EMP_NAME 직원명, DEPT_CODE 부서코드, CONCAT(SUBSTR(EMP_NO,1,2),'년',SUBSTR(EMP_NO,3,2),'월',SUBSTR(EMP_NO,5,2),'일') FROM EMPLOYEE;
+
+SELECT * FROM EMPLOYEE;
+SELECT EMP_NAME 직원명, DEPT_CODE 부서코드,
+	   SUBSTR(EMP_NO,1,2)||'년 ' ||
+	   SUBSTR(EMP_NO,3,2)||'월 ' ||
+	   SUBSTR(EMP_NO,5,2)||'일 ' 생년월일,
+	   EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM TO_DATE(SUBSTR(EMP_NO,1,6), 'YYMMDD')) 나이
+FROM EMPLOYEE; --날짜 이상하게 들어있는 데이터가 있어서 제대로 출력 안됨. 조건 넣어주면 될거임.
+
+
 
 
 --8. 직원들의 입사일로 부터 년도만 가지고, 각 년도별 입사인원수를 구하시오.
@@ -457,31 +467,28 @@ SELECT EMP_NAME 직원명, DEPT_CODE 부서코드, CONCAT(SUBSㅊTR(EMP_NO,1,2),
 --	-------------------------------------------------------------
 --	전체직원수   2001년   2002년   2003년   2004년
 --	-------------------------------------------------------------
-
+SELECT 
+	COUNT(*) 전체,
+	COUNT(DECODE(TO_CHAR(EXTRACT(YEAR FROM HIRE_DATE)),'2001',1)) "2001년",
+	COUNT(DECODE(TO_CHAR(EXTRACT(YEAR FROM HIRE_DATE)),'2002',1)) "2002년",
+	COUNT(DECODE(TO_CHAR(EXTRACT(YEAR FROM HIRE_DATE)),'2003',1)) "2003년",
+	COUNT(DECODE(TO_CHAR(EXTRACT(YEAR FROM HIRE_DATE)),'2004',1)) "2004년"
+FROM EMPLOYEE;
 
 
 --9.  부서코드가 D5이면 총무부, D6이면 기획부, D9이면 영업부로 처리하시오.
 --   단, 부서코드가 D5, D6, D9 인 직원의 정보만 조회함
 --  => case 사용
 --   부서코드 기준 오름차순 정렬함.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+SELECT EMP_NAME, DEPT_CODE, 
+	CASE 
+		WHEN DEPT_CODE = 'D5' THEN '총무부' 
+		WHEN DEPT_CODE = 'D6' THEN '기획부' 
+		WHEN DEPT_CODE = 'D9' THEN '영업부' 
+	END "부서명"
+FROM EMPLOYEE
+WHERE DEPT_CODE IN('D5','D6','D9')
+ORDER BY 2 ; --두번째 컬럼을 기준으로.
 
 
 
