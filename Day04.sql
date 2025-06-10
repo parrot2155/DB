@@ -126,6 +126,112 @@ SELECT EMP_ID, EMP_NAME, MANAGER_ID , NVL((SELECT EMP_NAME FROM EMPLOYEE E2 WHER
 FROM EMPLOYEE E1;
 
 
+--자신이 속한 직급의 평균 급여보다 많이 받는 사원
+--이름, 직급명, 급여정보 조회
+
+SELECT AVG(SALARY) FROM EMPLOYEE GROUP BY JOB_CODE;
+
+SELECT EMP_NAME, JOB_NAME, SALARY 
+FROM EMPLOYEE E1
+JOIN JOB J ON(E1.JOB_CODE = J.JOB_CODE) 
+WHERE SALARY>(
+	SELECT AVG(E2.SALARY) 
+	FROM EMPLOYEE E2
+	WHERE (E1.JOB_CODE = E2.JOB_CODE));
+	
+
+--DDL
+/*
+ * CREATE : 데이터베이스에서 객체를 생성하는 DDL
+ * 
+ * CREATE 객체종류 객체명(생성시 관련내용)
+ * 
+ * --계정 만든다.
+ * CREATE USER MULTI...
+ * 
+ * --테이블 만든다
+ *CREATE TABLE TEST...
+ *
+ *CREATE TABLE 테이블명( 컬럼명 자료형(길이) 제약조건,...)
+ *
+ *
+ *제약조건 : 테이블에 데이터를 저장하고자 할 떄 지켜야할 규칙, 제약
+ *
+ *NOT NULL	- NULL값 허용하지 않는다.(필수 입력사항.)
+ *UNIQUE	- 중복값 허용하지 않는다.
+ *CHECK		- 지정한 입력값 외에는 저장하지 못하게 막는 조건
+ *PRIMARY KEY - (NOT NULL + UNIQUE) 기본 키
+ *				테이블 내에서 행을(데이터, 로우)를 구분할 수 있는 고유 값.
+ *				테이블 안에 하나의 커럼만 선언 가능.
+ *FOREIGN KEY - 외래 키
+ *				다른 테이블에서 저장된 값을 연결지어 참조로 가져오는 데이터에 지정하는 제약조건.
+ *
+ */
+--테이블 생성
+CREATE TABLE MEMBER(
+	MEMBER_NO NUMBER,
+	MEMBER_ID VARCHAR2(20),
+	MEMBER_PWD VARCHAR2(20),
+	MEMBER_NAME VARCHAR2(20)
+);
+
+SELECT * FROM MEMBER;
+
+--현재 접속한 사용자(USER,계정)이 보유한 테이블 목록
+--데이터 사전
+SELECT * FROM USER_TABLES;
+
+SELECT * FROM USER_TAB_COLUMNS
+WHERE TABLE_NAME = 'MEMBER';
+
+SELECT * FROM USER_CONSTRAINTS;
+
+--제약조건(CONSTRAINTS)--
+--테이블 생성 시 각 컬럼에 값을 저장하는 것에 대한 제약사항을 설정할 때 사용하는 조건들
+--데이터 무결성 보장(데이터가 정확하고, 일관되고, 유효하다)보장
+
+--NOT NULL
+--'NULL 값을 허용하지 않는다.'
+--반드시 값을 저장해야 하는 컬럼인 경우 제약조건 추가
+
+CREATE TABLE USER_NONCONS(
+	NO NUMBER,
+	ID VARCHAR(20),
+	PW VARCHAR(20),
+	NAME VARCHAR2(20),
+	GENDER VARCHAR(3)
+);
+
+SELECT *  FROM USER_NONCONS;
+
+--테이블에 값 추가 DML에서 INSERT
+INSERT INTO USER_NONCONS(NO,ID,PW,NAME,GENDER)
+VALUES(1,'USER01','PASS01','홍길동','남');
+
+--데이터 추가 후 조회
+SELECT *  FROM USER_NONCONS; 
+
+INSERT INTO USER_NONCONS
+VALUES(2,NULL,NULL,NULL,'여');
+
+
+--NOT NULL 제약 조건 추가하여 확인
+CREATE TABLE USER_NOT_NULL(
+	NO NUMBER,
+	
+);
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
