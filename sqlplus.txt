@@ -63,3 +63,40 @@ SQL>DROP TABLE TEST;
 
 //접속종료
 SQL>EXIT;
+
+
+
+
+
+
+----------------------------------------
+0611 추가 권한 부여
+
+Microsoft Windows [Version 10.0.22631.5335]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\parro>sqlplus
+
+SQL*Plus: Release 19.0.0.0.0 - Production on 수 6월 11 14:52:26 2025
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+사용자명 입력: /as sysdba
+
+다음에 접속됨:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> GRANT CREATE VIEW TO MULTI;
+
+권한이 부여되었습니다.
+
+SQL> COMMIT;
+
+커밋이 완료되었습니다.
+
+
+
+
+
