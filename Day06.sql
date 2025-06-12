@@ -1,0 +1,112 @@
+--DAY06
+
+--시퀀스 옵션 CYCLE/CACHE
+CREATE SEQUENCE SEQ_CYCLE
+START WITH 200
+INCREMENT BY 10
+MAXVALUE 230
+MINVALUE 15
+CYCLE
+NOCACHE;
+
+SELECT SEQ_CYCLE.NEXTVAL FROM DUAL;
+SELECT SEQ_CYCLE.NEXTVAL FROM DUAL;
+SELECT SEQ_CYCLE.NEXTVAL FROM DUAL;
+SELECT SEQ_CYCLE.NEXTVAL FROM DUAL;
+
+SELECT * FROM USER_SEQUENCES;
+
+--CACHE / NOCACHE
+--컴퓨터가 다음 값에 대한 연산들을 미리 계산해 놓은것
+
+CREATE SEQUENCE SEQ_CACHE
+START WITH 100
+CACHE 20
+NOCYCLE;
+
+
+CREATE SEQUENCE SEQ_NOCACHE
+START WITH 100
+NOCACHE
+NOCYCLE;
+
+SELECT * FROM USER_SEQUENCES WHERE SEQUENCE_NAME LIKE '%CACHE';
+
+SELECT SEQ_CACHE.NEXTVAL, SEQ_NOCACHE.NEXTVAL
+FROM DUAL;
+
+
+--INDEX--
+--SQL 명령어 조회처리 속도를 향상시키기 위한 객체
+
+--장점 : 검색 속도 향상
+--단점 : 만약 테이블 내용이 자주 변경되는 테이블이라면 
+--		변경될 떄마다 인덱스를 다시 계산하여 만들어야 한다.
+--		성능이 저하될 수 있다.
+--		인덱스 저장 위한 별도의 공간 필요
+
+
+SELECT * FROM USER_IND_COLUMNS;
+
+SELECT ROWID, EMP_ID, EMP_NAME
+FROM EMPLOYEE;
+--ROWID
+--데이터의 순번. 오라클에서 테이블 생성, 데이터 추가시에 해당 객체들을 관리하기 위한 순번
+
+
+--인덱스 생성
+--SQL Error [1408] [72000]: ORA-01408: 열 목록에는 이미 인덱스가 작성되어 있습니다
+CREATE UNIQUE INDEX IDX_EMP_NO
+ON EMPLOYEE(EMP_NO);
+
+--고유 인덱스
+--	인덱스 생성시 고유값(유니크값)을 기준으로 생성하는 인덱스
+--	오라클에서 자동으로 생성하는 인덱스
+--	해당 컬럼을 SELECT문으로 조회할 때 포함시키면
+--	조회할 때 고유인덱스를 이용해서 검색속도를 향상시킨다.
+
+--비고유 인덱스(NOUNIQUE INDEX)
+--내가 자주 사용하는 컬럼을 인덱스로 구성
+
+SELECT EMP_NAME, DEPT_CODE, JOB_CODE
+FROM EMPLOYEE WHERE DEPT_CODE = 'D6';
+--0.003초 -> 0.002~0.001초
+
+CREATE INDEX IDX_DEPT_CODE
+ON EMPLOYEE(DEPT_CODE); --체감은 안되지만 아무튼 빠르게 검색할 수 있다.
+
+--결합인덱스(COMPOSITE INDEX)
+CREATE INDEX IDX_DEPT
+ON DEPARTMENT(DEPT_ID,DEPT_TITLE);
+
+SELECT * FROM DEPARTMENT;
+
+--인덱스 새로고침
+ALTER INDEX IDX_DEPT REBUILD;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
