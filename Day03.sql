@@ -481,6 +481,8 @@ SELECT * FROM employee;
 SELECT * FROM DEPARTMENT;
 SELECT * FROM mytest;
 
+SELECT * FROM product;
+
 
 
 
